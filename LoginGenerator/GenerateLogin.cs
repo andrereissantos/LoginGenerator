@@ -39,7 +39,6 @@ namespace LoginGenerator
         }
         private string GenerateLogin(string fullName, ref int iteration)
         {
-            
             var login = "";
             fullName = fullName.Trim();
             string[] names = fullName.Split(' ');
@@ -47,12 +46,13 @@ namespace LoginGenerator
             if (fullName.Length == 0)
                 return Guid.NewGuid().ToString();
 
-            if (iteration > names[0].Length)
+            if (iteration >= names[0].Length)
             {
                 var iteration2 = iteration - names[0].Length;
-                if ((iteration - iteration2 - names[0].Length) == 0)
+
+                if((iteration - iteration2 - names[0].Length) == 0)
                 {
-                    login = names[0] + (iteration - names[0].Length).ToString();
+                    login = names[0] + (1+iteration - names[0].Length).ToString();
                 }
                 else
                 {
@@ -60,15 +60,15 @@ namespace LoginGenerator
                 }
             }
             else
-                login = names[0] + names[names.Length - 1].Substring(0, iteration);
-
+            { 
+                login = names[0] + names[names.Length - 1].Substring(0, iteration - 1);
+            }
 
             if (CheckLogin(login.ToLower()))
             {
                 iteration++;
                 return GenerateLogin(fullName, ref iteration);
             }
-
             return login;
         }
     }
